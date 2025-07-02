@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #f2f2f2;
+            padding: 40px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 30px;
+        }
+
+        .card-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 200px;
+        }
+
+        .card h3 {
+            color: #007BFF;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .btn-container {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-container button {
+            padding: 12px 20px;
+            font-size: 15px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .btn-container button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h2>Admin Dashboard</h2>
+
+    <div class="card-container">
+        <div class="card">
+            <h3>Total Cars</h3>
+            <p id="totalCars">0</p>
+        </div>
+        <div class="card">
+            <h3>Total Users</h3>
+            <p id="totalUsers">0</p>
+        </div>
+        <div class="card">
+            <h3>Total Bookings</h3>
+            <p id="totalBookings">0</p>
+        </div>
+        <div class="card">
+            <h3>Today's Bookings</h3>
+            <p id="todayBookings">0</p>
+        </div>
+    </div>
+
+    <div class="btn-container">
+        <button onclick="location.href='addcar.html'">Add New Car</button>
+        <button onclick="location.href='viewcars.html'">View All Cars</button>
+        <button onclick="location.href='adminbookings.html'">Manage Bookings</button>
+        <button onclick="logout()">Logout</button>
+    </div>
+
+    <script>
+        function logout() {
+            alert("Logged out successfully!");
+            window.location.href = "LoginRegister.html";
+        }
+
+        fetch("dashboard")
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById("totalCars").innerText = data.totalCars;
+                document.getElementById("totalUsers").innerText = data.totalUsers;
+                document.getElementById("totalBookings").innerText = data.totalBookings;
+                document.getElementById("todayBookings").innerText = data.todayBookings;
+            });
+    </script>
+</body>
+</html>

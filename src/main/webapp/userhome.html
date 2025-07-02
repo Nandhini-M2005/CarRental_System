@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Dashboard - Car Rental</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9f9f9;
+            text-align: center;
+            padding: 40px;
+        }
+        h2 {
+            margin-bottom: 30px;
+        }
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 300px;
+            margin: auto;
+        }
+        button {
+            padding: 14px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h2>Welcome to Car Rental System</h2>
+    <div class="btn-container">
+        <button onclick="location.href='viewcars.html'">View Available Cars</button>
+        <button onclick="location.href='bookcar.html'">Book a Car</button>
+        <button onclick="location.href='mybookings.html'">My Bookings</button>
+        <button onclick="logout()">Logout</button>
+    </div>
+
+    <script>
+        function logout() {
+            alert("Logged out successfully!");
+            window.location.href = "LoginRegister.html";
+        }
+    </script>
+</body>
+</html>

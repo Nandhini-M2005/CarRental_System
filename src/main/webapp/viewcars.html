@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Available Cars</title>
+    <style>
+        table {
+            width: 70%;
+            border-collapse: collapse;
+            margin: 20px auto;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h2 style="text-align:center;">Available Cars</h2>
+    <table id="carTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Brand</th>
+                <th>Model</th>
+                <th>Price / Day</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        fetch('viewCars')
+        .then(res => res.json())
+        .then(data => {
+            let table = document.querySelector("#carTable tbody");
+            data.forEach(car => {
+                let formattedPrice = new Intl.NumberFormat('en-IN', {
+                    style: 'currency',
+                    currency: 'INR'
+                }).format(car.price_per_day);
+
+                let row = `
+                    <tr>
+                        <td>${car.id}</td>
+                        <td>${car.brand}</td>
+                        <td>${car.model}</td>
+                        <td>${formattedPrice}</td>
+                    </tr>
+                `;
+                table.innerHTML += row;
+            });
+        })
+        .catch(err => console.error("Error fetching cars:", err));
+    </script>
+</body>
+</html>

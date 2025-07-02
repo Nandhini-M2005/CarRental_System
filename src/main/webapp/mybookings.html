@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Bookings</title>
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #f4f4f4;
+            padding: 40px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        form {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        input[type="email"] {
+            padding: 10px;
+            width: 300px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            font-size: 16px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 90%;
+            margin: auto;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 14px;
+            text-align: center;
+        }
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+        td.status-approved { color: green; font-weight: bold; }
+        td.status-rejected { color: red; font-weight: bold; }
+        td.status-pending { color: orange; font-weight: bold; }
+        .cancel-btn {
+            padding: 6px 10px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2>My Bookings</h2>
+
+    <form onsubmit="fetchBookings(event)">
+        <input type="email" id="email" placeholder="Enter your email" required>
+        <button type="submit">View Bookings</button>
+    </form>
+
+    <table id="bookingTable">
+        <thead>
+            <tr>
+                <th>Booking ID</th>
+                <th>Car ID</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        function fetchBookings(e) {
+            e.preventDefault();
+            const email = document.getElementById("email").value;
+
+            fetch('viewBookings?email=' + encodeURIComponent(email))
+                .then(res => res.json())
+                .then(data => {
+                    const tableBody = document.querySelector("#bookingTable tbody");
+                    tableBody.innerHTML = "";
+
+                    data.forEach(b => {
+                        const statusClass = "status-" + b.status.toLowerCase();
+                        const cancelButton = b.status === "Pending"
+                            ? `<button class="cancel-btn" onclick="cancelBooking(${b.id}, '${email}')">Cancel</button>`
+                            : "";
+
+                        tableBody.innerHTML += `
+                            <tr>
+                                <td>${b.id}</td>
+                                <td>${b.car_id}</td>
+                                <td>${b.start_date}</td>
+                                <td>${b.end_date}</td>
+                                <td class="${statusClass}">${b.status}</td>
+                                <td>${cancelButton}</td>
+                            </tr>
+                        `;
+                    });
+                })
+                .catch(err => console.error("Error fetching bookings:", err));
+        }
+
+        function cancelBooking(id, email) {
+            if (confirm("Are you sure you want to cancel this booking?")) {
+                fetch("cancelBooking", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: `id=${id}`
+                })
+                .then(res => res.json())
+                .then(data => {
+                    alert(data.message);
+                    document.getElementById("email").value = email;
+                    fetchBookings(new Event("submit"));
+                });
+            }
+        }
+    </script>
+</body>
+</html>
